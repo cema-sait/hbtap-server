@@ -168,8 +168,8 @@ then share the password.
 
 ### Access the Application
 
-- **Main Application:** [http://127.0.0.0.1:8000](http://127.0.0.0.1:8000)
-- **Admin Panel:** [http://127.0.0.0.1:8000/admin](http://127.0.0.0.1:8000/admin)
+- **Main Application:** [http://127.0.0.0.1:8000](http://127.0.0.0.1:8000/api/v1)
+- **Admin Panel:** [http://127.0.0.0.1:8000/admin](http://127.0.0.0.1:8000/api/admin)
 
 ---
 
@@ -202,7 +202,7 @@ If you encounter database connection errors:
 
 After successful setup:
 
-1. **Access the admin panel** at [http://127.0.0.0.1:8000/admin](http://127.0.0.0.1:8000/admin)
+1. **Access the admin panel** at [http://127.0.0.0.1:8000/api/admin](http://127.0.0.0.1:8000/api/admin)
 2. **Configure your application settings** through the admin interface
 3. **Create additional user accounts** as needed
 4. **Review the API documentation** (if available)
