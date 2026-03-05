@@ -27,12 +27,10 @@ os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 SECRET_KEY = '83d29a715b21a101f7860ca9c8904b0465edd9fb2c5b2eef2e4f74953920166b'
 
 # Debug mode
-# DEBUG = False
-DEBUG = True  # Set to False in production
+DEBUG = False
 
 # Allowed Hosts
 ALLOWED_HOSTS = ['bptap.health.go.ke','localhost','127.0.0.1']
-# ALLOWED_HOSTS = ['*']  # For development only, allows all hosts. Change in production!
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,7 +67,7 @@ CRONJOBS = [
 
 # Redis URL – uses the Docker service name 'redis' when running in a container,
 # or falls back to localhost for plain local development.
-REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+REDIS_URL = 'redis://localhost:6379/0'
 
 # Channel Layers configuration
 CHANNEL_LAYERS = {
@@ -133,13 +131,9 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "https://bptap.health.go.ke",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://bptap.health.go.ke",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
 ]
 
 

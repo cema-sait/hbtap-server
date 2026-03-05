@@ -115,3 +115,5 @@ db-new.sqlite3-journal
 config.json
 
 ./migrations/
+
+.env

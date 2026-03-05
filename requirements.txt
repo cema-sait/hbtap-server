@@ -11,9 +11,10 @@ djangorestframework
 djangorestframework_simplejwt
 gunicorn
 pillow
-psycopg2
+psycopg2-binary
 python-dotenv
 redis
 requests
 user-agents
 django-crontab
+dj-database-url
