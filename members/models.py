@@ -367,12 +367,12 @@ class Message(models.Model):
             models.Index(fields=['user']),
             models.Index(fields=['parent_message']), 
         ]
-        constraints = [
-            models.CheckConstraint(
-                check=~models.Q(content=''),
-                name='non_empty_message_content'
-            )
-        ]
+        # constraints = [
+        #     models.CheckConstraint(
+        #         check=~models.Q(content=''),
+        #         name='non_empty_message_content'
+        #     )
+        # ]
 
     def __str__(self):
         if self.parent_message:
