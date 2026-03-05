@@ -147,23 +147,15 @@ CSRF_TRUSTED_ORIGINS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'hbtap'),
+        'USER': os.environ.get('POSTGRES_USER', 'hbtap'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'hbtap'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+    }
 }
-
-
-#DATABASES = {
-#    'default': {
-#       'ENGINE': 'django.db.backends.postgresql',
-#       'NAME': '*****',
-#       'USER': '****',
-#        'PASSWORD': '*******',
-#        'HOST': 'localhost',
-#        'PORT': 5432,
-#    }
-#}
 
 
 
