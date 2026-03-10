@@ -11,20 +11,24 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from datetime import timedelta
+import json
 import os
 from pathlib import Path
-
 from django.conf import settings
-import json
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+
 # Secret Key
-SECRET_KEY = '83d29a715b21a101f7860ca9c8904b0465edd9fb2c5b2eef2e4f74953920166b'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Debug mode
 # DEBUG = False
@@ -46,9 +50,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     # 'rest_framework_simplejwt.token_blacklist',  
     
-    'users',
-   # 'users.apps.UsersConfig',
+    # 'users',
+    'users.apps.UsersConfig',
     'members',
+    'app',
     'corsheaders',
     
     # 
@@ -56,15 +61,14 @@ INSTALLED_APPS = [
     'channels_redis',
     #  audit log
     'auditlog',
-    'django_crontab', # added  new
+    'django_crontab',
     
     
 ]
 
-# cronjobs added new
 CRONJOBS = [
-    # Every 3 minutes
-    ('*/3 * * * *', 'users.cron.send_email_job.send_email_cron'),
+    # Every 10 minutes
+    ('*/10 * * * *', 'users.cron.send_email_job.send_email_cron'),
 ]
 
 # Redis URL – uses the Docker service name 'redis' when running in a container,
@@ -111,9 +115,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hta.wsgi.application'
 
+
+
+
+
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10000000,
+    'PAGE_SIZE': 10000,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
@@ -208,9 +218,13 @@ MEDIA_URL = '/media/'
 # MEDIA_URL = 'https://bptap.health.go.ke/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-fld
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
 
 #  jwt settings
 SIMPLE_JWT = {
@@ -273,6 +287,8 @@ CELERY_TASK_ACKS_LATE = True
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1000
 
 
+VERIFICATION_BASE_URL  = os.getenv('VERIFICATION_BASE_URL')
+
 
 #  email config
 config_path = BASE_DIR / "config.json"
@@ -292,11 +308,14 @@ FRONTEND_URL = config.get('FRONTEND_URL')
 
     
 
-#logging - added cronjob logger
+
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
 
+    # ────────────────────── FORMATTERS ──────────────────────
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
