@@ -15,7 +15,7 @@ services:
 
   web:
     build: .
-    command: gunicorn hta.wsgi:application --bind 0.0.0.0:8000 --workers 3 --reload
+    command: gunicorn hta.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60 --graceful-timeout 30
     volumes:
       - .:/app
       - media_volume:/app/media
@@ -31,6 +31,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   celery:
     build: .
