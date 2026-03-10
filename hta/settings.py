@@ -36,7 +36,6 @@ DEBUG = True  # Set to False in production
 
 # Allowed Hosts
 ALLOWED_HOSTS = ['bptap.health.go.ke','localhost','127.0.0.1']
-# ALLOWED_HOSTS = ['*']  # For development only, allows all hosts. Change in production!
 
 INSTALLED_APPS = [
     'django.contrib.admin',
