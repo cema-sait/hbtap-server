@@ -2,8 +2,8 @@ name: Deploy to VPS
 
 on:
   push:
-    branches:
-      - backup
+    tags:
+      - 'v*.*.*'
 
 jobs:
   deploy:
@@ -21,55 +21,42 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
+          envs: GITHUB_REF_NAME
           script: |
             set -e
 
             cd ${{ secrets.APP_DIR }}
 
-            echo "→ Pulling latest changes from backup branch..."
-            git fetch origin backup
-            git reset --hard origin/backup
+            git fetch --tags origin
+            git checkout "$GITHUB_REF_NAME"
 
-            echo "→ Building new image (old containers still serving)..."
             docker compose build web celery
 
-            echo "→ Running migrations against new image before traffic swap..."
             docker compose run --rm --no-deps web python manage.py migrate --noinput
 
-            echo "→ Collecting static files..."
             docker compose run --rm --no-deps web python manage.py collectstatic --noinput
 
-            echo "→ Swapping web container (graceful, waits for healthcheck)..."
             docker compose up -d --no-deps --remove-orphans web
 
-            echo "→ Waiting for web to become healthy..."
             CONTAINER=$(docker compose ps -q web)
             for i in $(seq 1 20); do
               STATUS=$(docker inspect --format='{{.State.Health.Status}}' "$CONTAINER" 2>/dev/null || echo "none")
-              echo "  health status: $STATUS (attempt $i/20)"
-              if [ "$STATUS" = "healthy" ]; then
-                break
-              fi
+              echo "health: $STATUS ($i/20)"
+              [ "$STATUS" = "healthy" ] && break
               if [ "$STATUS" = "unhealthy" ]; then
-                echo "✗ Container is unhealthy. Aborting."
                 docker compose logs --tail=50 web
                 exit 1
               fi
               sleep 5
             done
+
             if [ "$STATUS" != "healthy" ]; then
-              echo "✗ Web container did not become healthy after 100s. Aborting."
               docker compose logs --tail=50 web
               exit 1
             fi
 
-            echo "→ Restarting celery with new image..."
             docker compose up -d --no-deps celery
-
-            echo "→ Ensuring redis and db are still up..."
             docker compose up -d --no-deps db redis
-
-            echo "→ Pruning unused Docker images..."
             docker image prune -f
 
-            echo "✓ Deployment complete."
+            echo "Deployed $GITHUB_REF_NAME"
