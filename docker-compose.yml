@@ -27,13 +27,14 @@ services:
     labels:
       - "traefik.enable=true"
 
-      # router
-      - "traefik.http.routers.hbtap.rule=Host(`hbtap-api.dev.cema.africa`)"
-      - "traefik.http.routers.hbtap.entrypoints=websecure"
-      - "traefik.http.routers.hbtap.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.bptap-api.rule=Host(`bptap.dev.cema.africa`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.bptap-api.entrypoints=websecure"
+      - "traefik.http.routers.bptap-api.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.bptap-api.middlewares=strip-api"
 
-      # service port (gunicorn runs on 8000)
-      - "traefik.http.services.hbtap.loadbalancer.server.port=8000"
+      - "traefik.http.middlewares.strip-api.stripprefix.prefixes=/api"
+
+      - "traefik.http.services.bptap-api.loadbalancer.server.port=8000"
     environment:
       - REDIS_URL=redis://redis:6379/0
     depends_on:
