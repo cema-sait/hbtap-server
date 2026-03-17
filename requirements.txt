@@ -17,3 +17,4 @@ requests
 user-agents
 django-crontab
 dj-database-url
+whitenoise
