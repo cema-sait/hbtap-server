@@ -20,7 +20,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Debug mode
 # DEBUG = False
-DEBUG = True  # Set to False in production
+DEBUG = False # Set to False in production
 
 # Allowed Hosts
 ALLOWED_HOSTS = ['hta.cema.africa','localhost','127.0.0.1']
