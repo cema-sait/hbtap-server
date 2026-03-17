@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True  # Set to False in production
 
 # Allowed Hosts
-ALLOWED_HOSTS = ['bptap.health.go.ke','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['hta.cema.africa','localhost','127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -129,12 +129,12 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "https://bptap.health.go.ke",
+    "https://hta.cema.africa",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://bptap.health.go.ke",
+    "https://hta.cema.africa",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
