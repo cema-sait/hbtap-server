@@ -24,10 +24,10 @@ def health_check(request):
         "debug": settings.DEBUG,
         "database": {
             "status": db_status,
-            "engine": db_config.get("ENGINE", "unknown"),
-            "name": db_config.get("NAME", "unknown"),
-            "host": db_config.get("HOST", "unknown"),
-            "port": db_config.get("PORT", "unknown"),
+            "engine": str(db_config.get("ENGINE", "unknown")),
+            "name": str(db_config.get("NAME", "unknown")),
+            "host": str(db_config.get("HOST", "unknown")),
+            "port": str(db_config.get("PORT", "unknown")),
         },
     }
 
