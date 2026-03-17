@@ -100,14 +100,14 @@ dmypy.json
 cython_debug/
 
 # Database backups
-*.sql
-*.dump
+# *.sql
+# *.dump
 
-db.sqlite3
-db.sqlite3
-db.sqlite3-journal
-db-new.sqlite3
-db-new.sqlite3-journal
+# db.sqlite3
+# db.sqlite3
+# db.sqlite3-journal
+# db-new.sqlite3
+# db-new.sqlite3-journal
 
 
 
