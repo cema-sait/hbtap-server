@@ -14,8 +14,8 @@ COPY . .
 
 RUN mkdir -p logs media staticfiles
 
-# Collect static files during build
-RUN python manage.py collectstatic --noinput --clear
+# Collect static files during build with dummy SECRET_KEY— not used at runtime
+RUN SECRET_KEY=dummy-build-secret python manage.py collectstatic --noinput --clear
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
