@@ -24,7 +24,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
 
-      - "traefik.http.routers.bptap-api.rule=Host(`hta.cema.africa`) && PathPrefix(`/api`)"
+      # - "traefik.http.routers.bptap-api.rule=Host(`hta.cema.africa`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.bptap-api.rule=Host(`hta.cema.africa`) && (PathPrefix(`/api`) || PathPrefix(`/static`) || PathPrefix(`/media`))"
       - "traefik.http.routers.bptap-api.entrypoints=websecure"
       - "traefik.http.routers.bptap-api.tls.certresolver=letsencrypt"
 
