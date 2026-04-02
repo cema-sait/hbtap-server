@@ -1,16 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 10s
-      retries: 5
-
   web:
     build: .
     command: gunicorn hta.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60 --graceful-timeout 30
@@ -23,20 +11,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-
       - "traefik.http.routers.bptap-api.rule=Host(`hta.cema.africa`) && PathPrefix(`/api`)"
       - "traefik.http.routers.bptap-api.entrypoints=websecure"
       - "traefik.http.routers.bptap-api.tls.certresolver=letsencrypt"
-
       - "traefik.http.services.bptap-api.loadbalancer.server.port=8000"
     environment:
       - REDIS_URL=redis://redis:6379/0
     networks:
       - proxy
-      - default
     depends_on:
-      db:
-        condition: service_healthy
       redis:
         condition: service_started
     stop_grace_period: 30s
@@ -59,18 +42,19 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379/0
     depends_on:
-      db:
-        condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - proxy
 
   redis:
     image: redis:7-alpine
     volumes:
       - redis_data:/data
+    networks:
+      - proxy
 
 volumes:
-  postgres_data:
   media_volume:
   logs_volume:
   redis_data:
